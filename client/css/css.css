@@ -40,6 +40,9 @@
      display: inline-block;
  }
  
+ #status{
+     color: blue;
+ }
  .controls {
      height: 100px;
      margin: 5px 0px;
@@ -51,6 +54,7 @@
      background-color: #fff;
      overflow: auto;
      padding: 2px;
+     margin-top: 10px;
  }
  
  #historyMsg img {
