@@ -9,33 +9,38 @@ app.use("/", express.static(__dirname + '/client'));
 server.listen(3000);
 
 //socket部分  
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     //接收并处理客户端发送的foo事件  
-    socket.on('foo', function(data) {
+    socket.on('foo', function (data) {
         //将消息输出到控制台  
         console.log(data);
     });
 
     // 用户登录
-    socket.on("login", function(nickname) {
-        if(users.indexOf(nickname)!=-1){
+    socket.on("login", function (nickname) {
+        if (users.indexOf(nickname) != -1) {
             socket.emit("nickExisted");
-        }else{
+        } else {
             socket.userIndex = users.length;
             socket.nickname = nickname;
             users.push(nickname);
             socket.emit("loginSuccess");
-            socket.broadcast.emit("system",nickname,users.length,"login");
+            socket.broadcast.emit("system", nickname, users.length, "login");
         }
         console.log(nickname);
     });
 
-    socket.on("disconnect",function(){
-        users.splice(socket.userIndex,1);
-        socket.broadcast.emit("system",socket.nickname,users.length,"logout");
+    socket.on("disconnect", function () {
+        users.splice(socket.userIndex, 1);
+        socket.broadcast.emit("system", socket.nickname, users.length, "logout");
     });
 
-    socket.on("postMsg",function(msg){
-        socket.broadcast.emit("newMsg",socket.nickname,msg);
+    socket.on("postMsg", function (msg) {
+        socket.broadcast.emit("newMsg", socket.nickname, msg);
+    });
+
+    //广播图片信息
+    socket.on("img", function (img) {
+        socket.broadcast.emit("newImg", socket.nickname, img);
     });
 });
